@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public class Controller {
         this.auditoriums = new ArrayList<Auditorium>();
     }
 
-    public String registerEvent(String name, Date date, int start_hour, int end_hour, String teacher_in_charge,
+    public String registerEvent(String name, LocalDate date, int start_hour, int end_hour, String teacher_in_charge,
     String faculty_in_charge){
         String res = "Added successfully";
             events.add(new Event(name, date, start_hour, end_hour, teacher_in_charge, faculty_in_charge));

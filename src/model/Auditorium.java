@@ -59,7 +59,7 @@ public class Auditorium{
             image += (char) (r+65) + " |";
             for(int c = 0; c < chairs[r].length; c++){
                 if(chairs[r][c] == null)
-                    image += "     ";
+                    image += " [ ] ";
                 else if(chairs[r][c].getState() == Chair.O)
                     image += " [A] ";
                 else

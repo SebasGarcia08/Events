@@ -1,19 +1,19 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class Event {
     private String name;
-    private Date date;
+    private LocalDate date;
     private int start_hour;
     private int end_hour;
     private String teacher_in_charge;
     private String faculty_in_charge;
     private ArrayList<Auditorium> auditoriums;
 
-    public Event(String name, Date date, int start_hour, int end_hour, String teacher_in_charge,
+    public Event(String name, LocalDate date, int start_hour, int end_hour, String teacher_in_charge,
             String faculty_in_charge) {
         this.name = name;
         this.date = date;
@@ -32,11 +32,11 @@ public class Event {
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
