@@ -1,27 +1,46 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
 public class Event {
     private String name;
-    private LocalDate date;
-    private int start_hour;
-    private int end_hour;
+    private LocalDateTime start_date;
+    private int duration_hours;
     private String teacher_in_charge;
     private String faculty_in_charge;
     private ArrayList<Auditorium> auditoriums;
+    private LocalDateTime end_date;
 
-    public Event(String name, LocalDate date, int start_hour, int end_hour, String teacher_in_charge,
-            String faculty_in_charge) {
+    public Event(String name, LocalDateTime start_date, int duration_hours, String teacher_in_charge,
+    String faculty_in_charge) {
         this.name = name;
-        this.date = date;
-        this.start_hour = start_hour;
-        this.end_hour = end_hour;
+        this.start_date = start_date;
+        this.duration_hours = duration_hours;
         this.teacher_in_charge = teacher_in_charge;
         this.faculty_in_charge = faculty_in_charge;
-        this.auditoriums = new ArrayList<Auditorium>();
+        this.end_date = start_date.plusHours(duration_hours);
+    }
+
+    public LocalDateTime getEndDate(){
+        return this.end_date;
+    }
+
+    public LocalDateTime getStartDate() {
+        return start_date;
+    }
+
+    public void setStartDate(LocalDateTime start_date) {
+        this.start_date = start_date;
+    }
+
+    public int getDurationHours() {
+        return duration_hours;
+    }
+
+    public void setDurationHours(int duration_hours) {
+        this.duration_hours = duration_hours;
     }
 
     public String getName() {
@@ -30,30 +49,6 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public int getStartHour() {
-        return start_hour;
-    }
-
-    public void setStartHour(int StartHour) {
-        this.start_hour = StartHour;
-    }
-
-    public int getEndHour() {
-        return end_hour;
-    }
-
-    public void setEndHour(int EndHour) {
-        this.end_hour = EndHour;
     }
 
     public String getTeacherInCharge() {
@@ -79,4 +74,13 @@ public class Event {
     public void setAuditoriums(ArrayList<Auditorium> auditoriums) {
         this.auditoriums = auditoriums;
     }
+
+    @Override
+    public String toString() {
+        return "Event [auditoriums=" + auditoriums + ", duration_hours=" + duration_hours + ", end_date=" + end_date
+                + ", faculty_in_charge=" + faculty_in_charge + ", name=" + name + ", start_date=" + start_date
+                + ", teacher_in_charge=" + teacher_in_charge + "]";
+    }
+
+    
 }
