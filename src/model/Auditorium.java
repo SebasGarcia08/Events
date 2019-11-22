@@ -4,6 +4,7 @@ import java.util.ArrayList;
 // import java.util.Arrays;
 // import java.util.Collections;
 import java.util.Arrays;
+import java.util.Random;
 
 // - name: String
 // - location: double[2]
@@ -12,15 +13,18 @@ import java.util.Arrays;
 
 public class Auditorium {
     private String name;
-    private double[] location;
+    private String location;
     private Chair[][] chairs;
     private ArrayList<Event> events;
 
-    public Auditorium(String name, double[] location) {
+    // Constructor
+    public Auditorium(String name, String location) {
         this.name = name;
         this.location = location;
         this.events = new ArrayList<Event>();
+        createChairs(createRandomChairs());   
     }
+
 
     /**
      * <b>Description:</b> Creates the Chairs objects that fills the Chair
@@ -41,6 +45,7 @@ public class Auditorium {
      *                       = 10, then the row A will contain 10 rows.<br>
      */
     public void createChairs(int[] chairs_per_row) {
+        // Arrays.sort(chairs_per_row);
         int number_of_columns = chairs_per_row[0];
         int number_of_rows = chairs_per_row.length;
 
@@ -52,86 +57,164 @@ public class Auditorium {
         // Initialising the chairs matrix.
         Chair[][] chairs = new Chair[number_of_rows][number_of_columns];
 
+        // // Fill first row
+        // for(int j = 0; j < number_of_columns; j++)
+        //     chairs[0][j] = new Chair(Chair.O);
+
         // Fill chairs matrix in specified order and centered.
         for (int r = 0; r < number_of_rows; r++) {
+            // int edge =  Math.abs(chairs_per_row[r-1] - chairs_per_row[r]);  
+
+            // int edge_indentation = (number_of_columns == chairs_per_row[r]) ? 0 : edge/2;
             int edge_indentation = (number_of_columns == chairs_per_row[r]) ? 0 : number_of_columns / chairs_per_row[r];
             for (int c = edge_indentation; c < chairs_per_row[r] + edge_indentation; c++) {
                 chairs[r][c] = new Chair(Chair.O);
             }
         }
-        setChairs(chairs);
+        this.chairs = chairs;
     }
 
+    /**
+     * Creates a random array of numbers multiple of 4.
+     * @return int[] array of integers with random length.
+     */
+    public int[] createRandomChairs(){
+        Random rand = new Random();
+        int num_cols = rand.nextInt((10 - 1) + 5) + 5;
+        int[] res = new int[num_cols];
+
+        for(int i = res.length-1; i >= 0; i--)
+            res[i] = 4 * (i+1);
+
+        return res;
+    }
+
+    /**
+     * Sends visualization of the chairs of this auditorium.
+     * @return String, image of the state of the chairs of this auditorium 
+     */
     public String showChairs() {
         String image = "AUDITORY:\n";
         for (int r = 0; r < chairs.length; r++) {
             image += (char) (r + 65) + " |";
             for (int c = 0; c < chairs[r].length; c++) {
                 if (chairs[r][c] == null)
-                    image += " - ";
+                    image += "- ";
                 else if (chairs[r][c].getState() == Chair.O)
-                    image += " A ";
+                    image += "A ";
                 else
-                    image += " X ";
+                    image += "X ";
                 if (c == (chairs[r].length - 1))
                     image += "|\n";
             }
         }
-        image += "Number of chairs: " + Chair.getNumberOfObjs() + "\nPerfectage of deficient chairs: "
+        image +=   "   " + " - - - - - - - - - \n" ;
+        image +=   "   " + "| P A N T A L L A |\n" ;
+        image +=   "   " + " - - - - - - - - -\n" ;
+
+        image += "Number of chairs: " + getNumChairs() + "\nPercentage of deficient chairs: "
                 + calculatePercentageOfDeficient();
         return image;
     }
 
+    /**
+     * Calculates the percentage of deficient chairs. 
+     * @return double, percentage of deficient chairs.
+     */
     public double calculatePercentageOfDeficient() {
         int number_of_optimum_chairs = 0;
         for (Chair[] chair_row : chairs)
             for (Chair chair : chair_row)
                 number_of_optimum_chairs += (chair != null && chair.getState() == Chair.O) ? 1 : 0;
-        int number_of_deficient_chairs = Chair.getNumberOfObjs() - number_of_optimum_chairs;
-        return (100 * number_of_deficient_chairs) / Chair.getNumberOfObjs();
+        int number_of_deficient_chairs = getNumChairs() - number_of_optimum_chairs;
+        return (100 * number_of_deficient_chairs) / (double) getNumChairs();
     }
 
+    /**
+     * Calculates how many persons can be hosted in the chairs of this auditorium.
+     * @return int, number of persons that can be hosted on the number of chairs available. 
+     */
+    public int getCapacity(){
+        int num =0;
+        for (Chair[] chair_row : chairs)
+            for (Chair chair : chair_row)
+                num += (chair == null || chair.getState().equals(Chair.D)) ? 0 : 1;
+        return num;
+    }
+
+    /**
+     * Calculates the number of chairs, regardless of being reported as deficient or not.
+     * @return int, number of chairs.
+     */
+    public int getNumChairs(){
+        int num =0;
+        for (Chair[] chair_row : chairs)
+            for (Chair chair : chair_row)
+                num += (chair == null) ? 0 : 1;
+        return num;
+    }
+
+    /**
+     * Changes the state of chair specified
+     * @param id String where the first character is a letter that is cotained in auditorium's row letters. 
+     * And the rest of characters are integers greater than 1 and less than the number of columns of auditorium's chairs.   
+     */
     public void reportDeficientChair(String id) {
-        int row = (int) (id.charAt(0)) - 65;
+        int row = (int) (id.toUpperCase().charAt(0)) - 65;
         int column = Integer.valueOf(id.substring(1)) - 1;
         chairs[row][column].setState(Chair.D);
     }
 
+    /**
+     * Anwers if chair specified exists
+     * @param id String where the first character is a letter that is cotained in auditorium's row letters. 
+     * And the rest of characters are integers greater than 1 and less than the number of columns of auditorium's chairs.
+     * @return true if exists; othwerwise, returns false.
+     */
+    public boolean chairExists(String id){
+        int row = (int) (id.charAt(0)) - 65;
+        int column = Integer.valueOf(id.substring(1)) - 1;
+        return (chairs[row][column] != null);
+    }
+
+    /**
+     * Get name of auditorium
+     * @return name of auditorium
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double[] getLocation() {
-        return location;
-    }
-
-    public void setLocation(double[] location) {
-        this.location = location;
-    }
-
-    public Chair[][] getChairs() {
-        return chairs;
-    }
-
-    public void setChairs(Chair[][] chairs) {
-        this.chairs = chairs;
-    }
-
+    /**
+     * Get events of this auditoriums
+     * @return events of this auditoriums.
+     */
     public ArrayList<Event> getEvents() {
         return events;
     }
 
+    /**
+     * Updates the events of this auditorium
+     * @param events Event, new events.
+     */
     public void setEvents(ArrayList<Event> events) {
         this.events = events;
     }
 
+    /**
+     * Adds a new event to the events ArrayList of this auditorium
+     * @param event Event, new event to be added.
+     */
+    public void assignEvent(Event event){
+        this.events.add(event);
+    }
+
+    /**
+     * @return String summurizing the attributes of this auditorium.
+     */
     @Override
     public String toString() {
-        return "Auditorium [events=" + events + ", location=" + Arrays.toString(location) + ", name=" + name + "]";
+        return "Auditorium [events=" + events + ", location=" + location + ", name=" + name + "]";
     }
     
 }

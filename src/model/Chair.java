@@ -1,28 +1,28 @@
 package model;
 
 public class Chair {
-//     + D : String = "DEFICIENT"
-// + O: String = "OPTIMUM"
-// - state: String
 
     public static String D = "DEFICIENT";
     public static String O = "OPTIMUM";
     private String state;
-    public static int numberOfObjs = 0;
 
+    // Constructor
     public Chair(String state) {
         this.state = state;
-        ++numberOfObjs;
     }
 
-    public static int getNumberOfObjs() {
-        return numberOfObjs;
-    }
-
+    /**
+     * Get the state of this chair
+     * @return String, state of this chair DEFICIENT or OPTIMUM
+     */
     public String getState() {
         return state;
     }
     
+    /**
+     * Updates the state of this chair
+     * @param String, new state of this chair DEFICIENT or OPTIMUM
+     */
     public void setState(String state) {
         this.state = state;
     }

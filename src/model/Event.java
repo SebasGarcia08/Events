@@ -13,6 +13,7 @@ public class Event {
     private ArrayList<Auditorium> auditoriums;
     private LocalDateTime end_date;
 
+    // Constructor
     public Event(String name, LocalDateTime start_date, int duration_hours, String teacher_in_charge,
     String faculty_in_charge) {
         this.name = name;
@@ -23,58 +24,57 @@ public class Event {
         this.end_date = start_date.plusHours(duration_hours);
     }
 
+    /**
+     * Get the ending date of event
+     * @return LocalDateTime, the ending date of the event
+     */
     public LocalDateTime getEndDate(){
         return this.end_date;
     }
 
+    /**
+     * Get the start date of event
+     * @return LocalDateTime, the start date of the event
+     */    
     public LocalDateTime getStartDate() {
         return start_date;
     }
 
-    public void setStartDate(LocalDateTime start_date) {
-        this.start_date = start_date;
-    }
-
+    /**
+     * GEt duration hours of the event
+     * @return int, the number of hours of duration of the event
+     */
     public int getDurationHours() {
         return duration_hours;
     }
 
-    public void setDurationHours(int duration_hours) {
-        this.duration_hours = duration_hours;
-    }
-
+    /**
+     * Get the name of the event
+     * @return String, the name of the event
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTeacherInCharge() {
-        return teacher_in_charge;
-    }
-
-    public void setTeacherInCharge(String TeacherInCharge) {
-        this.teacher_in_charge = TeacherInCharge;
-    }
-
-    public String getFacultyInCharge() {
-        return faculty_in_charge;
-    }
-
-    public void setFacultyInCharge(String FacultyInCharge) {
-        this.faculty_in_charge = FacultyInCharge;
-    }
-
+    /**
+     * Get the auditoriums of the event
+     * @return ArrayList<Auditorium>, the auditoriumsused by this event.
+     */
     public ArrayList<Auditorium> getAuditoriums() {
         return auditoriums;
     }
 
+    /**
+     * Uodates the list of auditoriums used by this event
+     * @param auditoriums ArrayList of new auditoriums, cannot be null.
+     */
     public void setAuditoriums(ArrayList<Auditorium> auditoriums) {
         this.auditoriums = auditoriums;
     }
 
+    /**
+     * @return String summurizing the attributes of this event.
+     */
     @Override
     public String toString() {
         return "Event [auditoriums=" + auditoriums + ", duration_hours=" + duration_hours + ", end_date=" + end_date
