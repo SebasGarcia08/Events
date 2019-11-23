@@ -2,8 +2,10 @@ package model;
 
 public class Chair {
 
-    public static String D = "DEFICIENT";
-    public static String O = "OPTIMUM";
+    public static final String D = "DEFICIENT";
+    public static final String O = "OPTIMUM";
+    public static final String A = "AVAILABLE";
+    public static final String B = "OCCUPIED";
     private String state;
 
     // Constructor

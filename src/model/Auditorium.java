@@ -1,10 +1,13 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-// import java.util.Arrays;
-// import java.util.Collections;
 import java.util.Arrays;
 import java.util.Random;
+
+import ui.Main;
+
+import java.time.temporal.ChronoUnit;
 
 // - name: String
 // - location: double[2]
@@ -12,17 +15,22 @@ import java.util.Random;
 // - events: ArrayList<Event>
 
 public class Auditorium {
+    public static final String O = "OCCUPIED";
+    public static final String A = "AVAILABLE";
+
     private String name;
     private String location;
     private Chair[][] chairs;
     private ArrayList<Event> events;
+    private String state;
 
     // Constructor
     public Auditorium(String name, String location) {
         this.name = name;
         this.location = location;
         this.events = new ArrayList<Event>();
-        createChairs(createRandomChairs());   
+        createChairs(createRandomChairs());
+        this.state = A;   
     }
 
 
@@ -44,7 +52,7 @@ public class Auditorium {
      *                       number of chairs in that row. E.g. if chairs_per_row[0]
      *                       = 10, then the row A will contain 10 rows.<br>
      */
-    public void createChairs(int[] chairs_per_row) {
+    private void createChairs(int[] chairs_per_row) {
         // Arrays.sort(chairs_per_row);
         int number_of_columns = chairs_per_row[0];
         int number_of_rows = chairs_per_row.length;
@@ -78,7 +86,7 @@ public class Auditorium {
      * Creates a random array of numbers multiple of 4.
      * @return int[] array of integers with random length.
      */
-    public int[] createRandomChairs(){
+    private int[] createRandomChairs(){
         Random rand = new Random();
         int num_cols = rand.nextInt((10 - 1) + 5) + 5;
         int[] res = new int[num_cols];
@@ -94,14 +102,21 @@ public class Auditorium {
      * @return String, image of the state of the chairs of this auditorium 
      */
     public String showChairs() {
-        String image = "AUDITORY:\n";
+        getCurrentState();
+        String image = "\n/*===================== " +name + " AUDITORIUM =====================".toUpperCase();
+        image += "AUDITORIUM IS CURRENTLY [" + ((state.equals(A)) ? A : O) + "]\n";
+        image += "Chair's state:\nO: Optimum\nA: Available\nC: Occupied\nX: Deficient\n";
         for (int r = 0; r < chairs.length; r++) {
             image += (char) (r + 65) + " |";
             for (int c = 0; c < chairs[r].length; c++) {
                 if (chairs[r][c] == null)
-                    image += "- ";
-                else if (chairs[r][c].getState() == Chair.O)
+                    image += "  ";
+                else if (chairs[r][c].getState().equals(Chair.O))
+                    image += "O ";
+                else if (chairs[r][c].getState().equals(Chair.A))
                     image += "A ";
+                else if (chairs[r][c].getState().equals(Chair.B))
+                    image += "C ";
                 else
                     image += "X ";
                 if (c == (chairs[r].length - 1))
@@ -112,20 +127,87 @@ public class Auditorium {
         image +=   "   " + "| P A N T A L L A |\n" ;
         image +=   "   " + " - - - - - - - - -\n" ;
 
-        image += "Number of chairs: " + getNumChairs() + "\nPercentage of deficient chairs: "
-                + calculatePercentageOfDeficient();
+        image += "Number of chairs: " + getNumChairs() + "\nPercentage of deficient chairs: %"
+                + calculatePercentageOfDeficient() + "\n" + getCurrentState()+"\n";
         return image;
+    }
+
+    /**
+     * Evaluates if the auditoriums is currently available or occupied by an event. 
+     * @return String, message informing if is available; otherwise answers in how many hours will be occupied.
+     */
+    public String getCurrentState(){
+        if(events.size() > 0){
+            LocalDateTime now = LocalDateTime.now();
+            String res = "Auditorium is currently available, but will be occupied in " + now.until(getNextEvent().getStartDate(), ChronoUnit.HOURS) + " hours";
+            for(Event e : events)   
+                if(now.isBefore(e.getEndDate()) && now.isAfter(e.getStartDate())){
+                    fillChairs(e);
+                    this.state = O;
+                    res = "Auditorium is currently occupied by event " + e.getName();
+                }
+            return res;
+        } else {
+            this.state = A;
+            return "Auditorium has not events assigned yet.";
+        }
+    }
+
+    /**
+     * Updates the state of the chairs according to the number od assistants event specified.
+     * <b>pre: </b> event0s assistants are equal or less than the capicity of this auditorium.
+     * @param e event which assistants will occupy this auditorium's chairs.
+     */
+    private void fillChairs(Event e){
+        int num_filled = 0;
+        Chair[][] old_chairs = this.chairs;
+        Chair[][] new_chairs = old_chairs;
+        for(Chair[] chair_row : new_chairs){
+            for(Chair chair : chair_row){
+                if(num_filled == e.getNumAssistants()){
+                    return;
+                }
+                else{
+                    if(chair != null){
+                        chair.setState(Chair.B);
+                        ++num_filled;    
+                    }
+                }
+            }
+        }
+        this.chairs = new_chairs;
+    }
+
+    /**
+     * Gets the next event taking as reference the current date time.
+     * @return the sooner event registered in this auditorium; if not registered, returns null.
+     */
+    public Event getNextEvent(){
+        if(events.size() > 0){
+            Event next = events.get(events.size()-1);
+            LocalDateTime now = LocalDateTime.now(); 
+            LocalDateTime max = LocalDateTime.MAX;
+            for(Event e : events){
+                if(now.isBefore(e.getStartDate()) && e.getStartDate().isBefore(max)){
+                    max = e.getStartDate();
+                    next = e;
+                }
+            }
+            return next;
+        } else {
+            return null;
+        }
     }
 
     /**
      * Calculates the percentage of deficient chairs. 
      * @return double, percentage of deficient chairs.
      */
-    public double calculatePercentageOfDeficient() {
+    private double calculatePercentageOfDeficient() {
         int number_of_optimum_chairs = 0;
         for (Chair[] chair_row : chairs)
             for (Chair chair : chair_row)
-                number_of_optimum_chairs += (chair != null && chair.getState() == Chair.O) ? 1 : 0;
+                number_of_optimum_chairs += (chair != null && !chair.getState().equals(Chair.D)) ? 1 : 0;
         int number_of_deficient_chairs = getNumChairs() - number_of_optimum_chairs;
         return (100 * number_of_deficient_chairs) / (double) getNumChairs();
     }
@@ -147,7 +229,7 @@ public class Auditorium {
      * @return int, number of chairs.
      */
     public int getNumChairs(){
-        int num =0;
+        int num = 0;
         for (Chair[] chair_row : chairs)
             for (Chair chair : chair_row)
                 num += (chair == null) ? 0 : 1;

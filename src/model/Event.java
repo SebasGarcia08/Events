@@ -12,16 +12,26 @@ public class Event {
     private String faculty_in_charge;
     private ArrayList<Auditorium> auditoriums;
     private LocalDateTime end_date;
+    private int num_assistants;
 
     // Constructor
     public Event(String name, LocalDateTime start_date, int duration_hours, String teacher_in_charge,
-    String faculty_in_charge) {
+    String faculty_in_charge, int num_assistants) {
         this.name = name;
         this.start_date = start_date;
         this.duration_hours = duration_hours;
         this.teacher_in_charge = teacher_in_charge;
         this.faculty_in_charge = faculty_in_charge;
+        this.num_assistants = num_assistants;
         this.end_date = start_date.plusHours(duration_hours);
+    }
+
+    /**
+     * Get number of assistants of event.
+     * @return number of assistants.
+     */
+    public int getNumAssistants(){
+        return this.num_assistants;
     }
 
     /**

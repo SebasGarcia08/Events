@@ -14,7 +14,7 @@ public class Main {
     private static Controller controller;
     private static Scanner num_sc;
     private static Scanner str_sc;
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); 
+    public static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); 
 
     public Main(){
         controller = new Controller();
@@ -31,14 +31,15 @@ public class Main {
         int election = 0;
         out.println("Welcome to this application for managing events in ICESI University. Choose:");
         // Principal menu
-        while(election != 6){
+        while(election != 7){
             out.print("MENU    \n[1]. Register event "+
                               "\n[2]. Register new auditorium"+
                               "\n[3]. Report defective chair" +
                               "\n[4]. Cancell event"+ 
                               "\n[5]. Show events in the next 5 days"+
-                              "\n[6]. Exit"+
-                              "\nElection [1/2/3/4]: ");
+                              "\n[6] Consult current state of auditorium" +
+                              "\n[7]. Exit"+
+                              "\nElection [1/2/3/4/5/6/7]: ");
             election = num_sc.nextInt();
             switch (election) {
                 case 1:
@@ -52,7 +53,10 @@ public class Main {
                 case 5:
                     out.println(app.controller.getEventsInNext5Days()); break;
                 case 6:
+                    app.consultStateOfAudit();
                     break;
+                case 7:
+                    out.println("Goodbye!"); break;
                 default:
                     out.println("Invalid choice"); break;
             }
@@ -126,7 +130,7 @@ public class Main {
              String teacher_in_charge = str_sc.nextLine();
             out.print("Type the name of the faculty in charge: ");
             String faculty_in_charge = str_sc.nextLine();
-            out.println(controller.registerEvent(event_name, audit_name,starting_date, duration_hours, teacher_in_charge, faculty_in_charge));
+            out.println(controller.registerEvent(event_name, audit_name,starting_date, duration_hours, teacher_in_charge, faculty_in_charge, num_assistants));
         } else {
             out.println(res);
             return;
@@ -176,5 +180,13 @@ public class Main {
     public void cancelEvent(){
         String event_name = requestEventName(false);
         out.println(controller.cancelEvent(event_name));
+    }
+
+    /**
+     * This method shows what is the state of the auditoriums indicated by user.
+     */
+    public void consultStateOfAudit(){
+        String audit_name = requestAuditName(false);
+        out.println(controller.getAuditoriumByName(audit_name).showChairs());
     }
 }

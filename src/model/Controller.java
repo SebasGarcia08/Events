@@ -1,9 +1,8 @@
 package model;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Controller {
     private ArrayList<Event> events;
@@ -128,10 +127,9 @@ public class Controller {
             date_is_valid = false;
         }
         if( starting_date.getHour() < 7 || starting_date.getHour() > 20){
-            log += "Events must begin after 6:59 and before 20:00";
+            log += "Events must begin after 6:59 and end before 20:00";
             date_is_valid = false;
-        }
-
+        } 
         if(date_is_valid && !event_coincide_with_another && audit_has_enough_capacity)
             log = SIA;
 
@@ -140,7 +138,7 @@ public class Controller {
 
     public String registerAuditorium(String name, String location){
         auditoriums.add(new Auditorium(name, location));
-        return name + " added successfully";
+        return ("*" + name + " added successfully").toUpperCase();
     }
 
     /**
@@ -150,11 +148,11 @@ public class Controller {
      * @return String containing the message with information about the result of operation. 
      */
     public String registerEvent(String event_name, String audit_name, LocalDateTime starting_date, int duration_hours, String teacher_in_charge,
-    String faculty_in_charge ){
-        Event new_event = new Event(event_name, starting_date, duration_hours, teacher_in_charge, faculty_in_charge); 
+    String faculty_in_charge, int num_assistants){
+        Event new_event = new Event(event_name, starting_date, duration_hours, teacher_in_charge, faculty_in_charge, num_assistants); 
         events.add(new_event);
         auditoriums.get(searchAuditoriumByName(audit_name)).assignEvent(new_event);
-        return event_name + " added succesfully";
+        return ("*" + event_name + " added succesfully *").toUpperCase();
     }
 
     /**
@@ -188,7 +186,7 @@ public class Controller {
                 next_events.add(e);
         
         for(Event e : next_events)
-            list += e.getName() + ", " + e.getStartDate() + "\n";
+            list += e.toString() + "\n";
         
         return list;
     }
