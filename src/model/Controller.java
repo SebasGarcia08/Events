@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * <b>Name: </b> Controller
- * <b>Description: </b> This class is responsible for the backend of the application 
+ * <b>Description: </b> This class is responsible for the backend of the application </ br>
  * responsible of provide solutions to the following functional requirements:
  * 
  * @author Sebastian Garcia Acosta. 
@@ -161,6 +161,13 @@ public class Controller {
      * <li>5.	Event’s duration hours cannot exceed 12 and cannot be less than 2.</li>
      * <li>6.	An event cannot take place before 7:00 nor after 20:00 </li>
      * </ol>
+     * @param event_name event name to be added
+     * @param audit_name String, the name of the auditorium to be consulted
+     * @param starting_date LocalDateTime starting date of event to be potentially registered
+     * @param duration_hours int, number of hours of duration of event to be potentially registered
+     * @param teacher_in_charge String, name of professor in charge 
+     * @param faculty_in_charge Stirng, name of faculty in charge
+     * @param num_assistants int, number of assistants of event to be potentially registered
      * @return String containing the message with information about the result of operation. </li>
      */
     public String registerEvent(String event_name, String audit_name, LocalDateTime starting_date, int duration_hours, String teacher_in_charge,
@@ -233,7 +240,7 @@ public class Controller {
 
      /**
      * <b>post: </b> updates ArrayList of auditoriums 
-     * @param events ArrayList<Auditorium> new auditoriums to be updated. 
+     * @param auditoriums ArrayList<Auditorium> new auditoriums to be updated. 
      */
     public void setAuditoriums(ArrayList<Auditorium> auditoriums) {
         this.auditoriums = auditoriums;

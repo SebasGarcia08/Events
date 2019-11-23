@@ -32,7 +32,7 @@ public class Chair {
 
     /**
      * Updates the description of the defect of this chair if any.
-     * @param defectiveDescription
+     * @param defectiveDescription String, description of what chair was reported
      */
     public void setDefectiveDescription(String defectiveDescription) {
         this.defectiveDescription = defectiveDescription;

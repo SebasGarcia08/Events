@@ -5,12 +5,11 @@ import model.*;
 import java.util.*;
 import static java.lang.System.out;
 import java.lang.System;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/** <b>Name: </b> Main
- *  <b>Description: </b> This class is encharged of handling the interaction with user.
+/** <b>Name: </b> Main </ br>
+ *  <b>Description: </b> This class is encharged of handling the interaction with user. </ br>
  * @author Sebastian Garcia Acosta
  */
 

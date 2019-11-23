@@ -4,14 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
-import ui.Main;
-
 import java.time.temporal.ChronoUnit;
-
-// - name: String
-// - location: double[2]
-// - chairs: Chair[][]
-// - events: ArrayList<Event>
 
 public class Auditorium {
     public static final String O = "OCCUPIED";
@@ -52,7 +45,6 @@ public class Auditorium {
      *                       = 10, then the row A will contain 10 rows.<br>
      */
     private void createChairs(int[] chairs_per_row) {
-        // Arrays.sort(chairs_per_row);
         int number_of_columns = chairs_per_row[0];
         int number_of_rows = chairs_per_row.length;
 
@@ -64,16 +56,9 @@ public class Auditorium {
         // Initialising the chairs matrix.
         Chair[][] chairs = new Chair[number_of_rows][number_of_columns];
 
-        // // Fill first row
-        // for(int j = 0; j < number_of_columns; j++)
-        //     chairs[0][j] = new Chair(Chair.O);
-
         // Fill chairs matrix in specified order and centered.
         for (int r = 0; r < number_of_rows; r++) {
-            // int edge =  Math.abs(chairs_per_row[r-1] - chairs_per_row[r]);  
-
-            // int edge_indentation = (number_of_columns == chairs_per_row[r]) ? 0 : edge/2;
-            int edge_indentation = (number_of_columns == chairs_per_row[r]) ? 0 : number_of_columns / chairs_per_row[r];
+          int edge_indentation = (number_of_columns == chairs_per_row[r]) ? 0 : number_of_columns / chairs_per_row[r];
             for (int c = edge_indentation; c < chairs_per_row[r] + edge_indentation; c++) {
                 chairs[r][c] = new Chair(Chair.O);
             }
