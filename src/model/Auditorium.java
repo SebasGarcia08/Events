@@ -2,7 +2,6 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import ui.Main;
@@ -103,7 +102,7 @@ public class Auditorium {
      */
     public String showChairs() {
         getCurrentState();
-        String image = "\n/*===================== " +name + " AUDITORIUM =====================".toUpperCase();
+        String image = "\n/*===================== " +name + " AUDITORIUM =====================*/\n".toUpperCase();
         image += "AUDITORIUM IS CURRENTLY [" + ((state.equals(A)) ? A : O) + "]\n";
         image += "Chair's state:\nO: Optimum\nA: Available\nC: Occupied\nX: Deficient\n";
         for (int r = 0; r < chairs.length; r++) {
@@ -123,9 +122,9 @@ public class Auditorium {
                     image += "|\n";
             }
         }
-        image +=   "   " + " - - - - - - - - - \n" ;
-        image +=   "   " + "| P A N T A L L A |\n" ;
-        image +=   "   " + " - - - - - - - - -\n" ;
+        image +=   "   " + " - - - - - - - - - - - \n" ;
+        image +=   "   " + "|     S C R E E N     |\n" ;
+        image +=   "   " + " - - - - - - - - - - -\n" ;
 
         image += "Number of chairs: " + getNumChairs() + "\nPercentage of deficient chairs: %"
                 + calculatePercentageOfDeficient() + "\n" + getCurrentState()+"\n";
@@ -139,7 +138,7 @@ public class Auditorium {
     public String getCurrentState(){
         if(events.size() > 0){
             LocalDateTime now = LocalDateTime.now();
-            String res = "Auditorium is currently available, but will be occupied in " + now.until(getNextEvent().getStartDate(), ChronoUnit.HOURS) + " hours";
+            String res = "Auditorium is currently available, but will be occupied in " + now.until(getNextEvent().getStartDate(), ChronoUnit.HOURS) + " hours by " + getNextEvent().getName();
             for(Event e : events)   
                 if(now.isBefore(e.getEndDate()) && now.isAfter(e.getStartDate())){
                     fillChairs(e);
@@ -241,10 +240,11 @@ public class Auditorium {
      * @param id String where the first character is a letter that is cotained in auditorium's row letters. 
      * And the rest of characters are integers greater than 1 and less than the number of columns of auditorium's chairs.   
      */
-    public void reportDeficientChair(String id) {
+    public void reportDeficientChair(String id, String desc) {
         int row = (int) (id.toUpperCase().charAt(0)) - 65;
         int column = Integer.valueOf(id.substring(1)) - 1;
         chairs[row][column].setState(Chair.D);
+        chairs[row][column].setDefectiveDescription(desc);
     }
 
     /**

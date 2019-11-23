@@ -4,6 +4,14 @@ package model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * <b>Name: </b> Controller
+ * <b>Description: </b> This class is responsible for the backend of the application 
+ * responsible of provide solutions to the following functional requirements:
+ * 
+ * @author Sebastian Garcia Acosta. 
+ */
+
 public class Controller {
     private ArrayList<Event> events;
     private ArrayList<Auditorium> auditoriums;
@@ -126,7 +134,7 @@ public class Controller {
             log += "Events must last at least 2 hours and not more than 12 hours.";
             date_is_valid = false;
         }
-        if( starting_date.getHour() < 7 || starting_date.getHour() > 20){
+        if( starting_date.getHour() < 7 || end_date.getHour() > 20){
             log += "Events must begin after 6:59 and end before 20:00";
             date_is_valid = false;
         } 
@@ -144,8 +152,16 @@ public class Controller {
     /**
      * Creates an event and associate it with the specified auditorium
      * <b>pre: </b> auditorium specified by name is already registered
-     * <b>pre: </b> all fields of event are valid
-     * @return String containing the message with information about the result of operation. 
+     * <b>pre: </b> all fields of event are valid according to the following criteria:
+     * <ol>
+     * <li>1.	The number of assistants has to be hosted perfectly by the auditorium selected.</li>
+     * <li>2.	Event’s name cannot match with an existing one.</li>
+     * <li>3.	Event’s date cannot coincide with another’s one.</li>
+     * <li>4.	Event’s date cannot be before the current date.</li>
+     * <li>5.	Event’s duration hours cannot exceed 12 and cannot be less than 2.</li>
+     * <li>6.	An event cannot take place before 7:00 nor after 20:00 </li>
+     * </ol>
+     * @return String containing the message with information about the result of operation. </li>
      */
     public String registerEvent(String event_name, String audit_name, LocalDateTime starting_date, int duration_hours, String teacher_in_charge,
     String faculty_in_charge, int num_assistants){

@@ -7,6 +7,7 @@ public class Chair {
     public static final String A = "AVAILABLE";
     public static final String B = "OCCUPIED";
     private String state;
+    private String defectiveDescription = null;
 
     // Constructor
     public Chair(String state) {
@@ -28,4 +29,13 @@ public class Chair {
     public void setState(String state) {
         this.state = state;
     }
+
+    /**
+     * Updates the description of the defect of this chair if any.
+     * @param defectiveDescription
+     */
+    public void setDefectiveDescription(String defectiveDescription) {
+        this.defectiveDescription = defectiveDescription;
+    }
+
 }

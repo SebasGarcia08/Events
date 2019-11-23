@@ -9,6 +9,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/** <b>Name: </b> Main
+ *  <b>Description: </b> This class is encharged of handling the interaction with user.
+ * @author Sebastian Garcia Acosta
+ */
+
 
 public class Main {
     private static Controller controller;
@@ -170,7 +175,9 @@ public class Main {
                 break;
             }
         }
-        audit.reportDeficientChair(chair_loc);
+        out.print("Insert a brief description of reported defect: ");
+        String desc = str_sc.nextLine();
+        audit.reportDeficientChair(chair_loc, desc);
     }
 
     /**
